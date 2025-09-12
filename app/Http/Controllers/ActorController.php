@@ -126,16 +126,17 @@ class ActorController extends Controller
 
     protected function buildPrompt(string $description): string
     {
-        // Few-shot examples + strict instructions
         return <<<PROMPT
-            You are a strict data extractor. Given an actor description, return ONLY a single VALID JSON object (no commentary, no markdown) with these exact keys:
+            You are a strict JSON extractor. Given the description below, return ONLY a single VALID JSON object (no commentary, no markdown) with these exact keys:
             first_name, last_name, address, height, weight, gender, age.
 
             Rules:
             - Always return valid JSON with these keys.
-            - If you can extract a value, return it (do not invent). If not present, return an empty string.
+            - If a value can be extracted from the description, return it exactly (do not invent).
+            - If the description contains a single personal name (one capitalized word) treat it as first_name and leave last_name empty.
+            - If the description contains multiple person entries (multiple people), return a JSON *array* of objects (each object with the same keys).
             - Do NOT include extra fields or surrounding text.
-            - Keep values concise (no long explanations).
+            - Keep values concise.
 
             Examples:
             Description:
@@ -156,8 +157,9 @@ class ActorController extends Controller
             \"\"\"
 
             Return JSON only:
-        PROMPT;
+            PROMPT;
     }
+
 
 
 }
