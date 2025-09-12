@@ -1,66 +1,155 @@
-<<<<<<< HEAD
-# actor-extraction-app
-Laravel-based Actor Management App with AI-powered data extraction (OpenAI) to parse names, addresses, and profiles from unstructured text.
-=======
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Actor Extraction App
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**Laravel-based Actor Management App** with AI-powered data extraction (OpenAI) to parse names, addresses and basic profile fields from free-form text.
 
-## About Laravel
+- Tech: PHP (Laravel), PHPUnit tests, OpenAI integration (optional), Postman collection for manual testing.
+- Purpose: extract `first_name`, `last_name`, `address`, `height`, `weight`, `gender`, and `age` from free-form descriptions using heuristics and OpenAI fallback.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Table of Contents
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- [Requirements](#requirements)  
+- [Quick install (local dev)](#quick-install-local-dev)  
+- [Environment variables](#environment-variables)  
+- [Usage](#usage)  
+  - [Web UI](#web-ui)  
+  - [API](#api)  
+- [Postman collection](#postman-collection)  
+- [Running tests](#running-tests)  
+- [Troubleshooting](#troubleshooting)  
+- [Contributing & opening a PR](#contributing--opening-a-pr)  
+- [License](#license)
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Requirements
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- PHP 8.1+ (or matching your Laravel version)
+- Composer
+- Node.js & npm (optional for front-end assets)
+- SQLite (recommended for tests) or MySQL/Postgres
+- Git
+- (Optional) `gh` GitHub CLI to create PRs from your terminal
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## Quick install (local dev)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+# clone
+git clone https://github.com/sttech321/actor-extraction-app.git
+cd actor-extraction-app
 
-### Premium Partners
+# install PHP deps
+composer install
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+# copy env and generate key
+cp .env.example .env
+php artisan key:generate
 
-## Contributing
+# recommended quick DB (sqlite)
+mysql 
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# run migrations
+php artisan migrate
 
-## Code of Conduct
+# optional: seed
+php artisan db:seed
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+# optional: build assets
+npm install
+npm run dev
 
-## Security Vulnerabilities
+# run dev server
+php artisan serve
+# open http://127.0.0.1:8000
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
+#env setting
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
->>>>>>> ab5d6d3 (Initial commit: Laravel Actor Extraction App with OpenAI integration)
+APP_NAME="Actor App"
+APP_ENV=local
+APP_URL=http://127.0.0.1:8000
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=actor_app
+DB_USERNAME=root
+DB_PASSWORD= 
+
+# Optional: provide an OpenAI API key to enable AI fallback
+OPENAI_API_KEY=sk-...
+
+
+
+
+
+# run all tests
+php artisan test
+
+# run only feature tests
+php artisan test --testsuite=Feature
+
+# run single class
+php artisan test --filter ActorControllerTest
+
+#Postman collection
+{
+  "info": {
+    "name": "Actor Extraction App",
+    "description": "Postman collection for Actor Extraction App endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "item": [
+    {
+      "name": "Prompt Validation (API)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Accept", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"description\": \"John Doe, 742 Evergreen Terrace, Springfield. Male, 180 cm, 75 kg, 32 years old.\"\n}",
+          "options": { "raw": { "language": "json" } }
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/actors/prompt-validation",
+          "protocol": "http",
+          "host": ["127","0","0","1"],
+          "port": "8000",
+          "path": ["api","actors","prompt-validation"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Actor (form)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Accept", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            { "key": "email", "value": "test@example.com", "type": "text" },
+            { "key": "description", "value": "John Doe, 742 Evergreen Terrace, Springfield. Male, 180 cm, 75 kg, 32 years old.", "type": "text" }
+          ]
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/actors",
+          "protocol": "http",
+          "host": ["127","0","0","1"],
+          "port": "8000",
+          "path": ["actors"]
+        }
+      },
+      "response": []
+    }
+  ]
+}
